@@ -8,11 +8,13 @@ The folder titled "RFID" contains the mercury-api and code required to run the R
 
 # Operation
 Terminal Compile Command
+
 Note: Use this command to compile the java file "SDP_RFID.java" after any changes.
 
 	javac -cp .:ltkjava-1.0.0.6.jar:mercuryapi.jar SDP_RFID.java
 
 Terminal Execution Command
+
 Note: Use this command to execute the java file
 
 	java -cp .:ltkjava-1.0.0.6.jar:mercuryapi.jar SDP_RFID

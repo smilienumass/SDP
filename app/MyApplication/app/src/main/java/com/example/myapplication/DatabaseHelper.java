@@ -3,6 +3,7 @@ package com.example.myapplication;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,12 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+
+
+// This is for saving items entered on the app
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
@@ -19,6 +26,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String TABLE_NAME = "items_table";
     private static final String ID = "ID";
     private static final String ITEM = "name";
+
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference items_list_ref = database.getReference("Items_table");
+
+
 
     public DatabaseHelper(Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -52,6 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 break;
             }
         }
+
             contentValues.put(ID, id);
             contentValues.put(ITEM, item);
 
@@ -63,6 +77,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         if (result == -1) {
             return false;
         } else {
+            ///for updating firebase
+            DatabaseReference postsRef = items_list_ref.child(item);
+            postsRef.setValue(id);
             return true;
         }
     }
@@ -98,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
      * @param id
      * @param oldName
      */
-    public void updateName(String newName, int id, String oldName){
+    public void updateName(String newName, String id, String oldName){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "UPDATE " + TABLE_NAME + " SET " + ITEM +
                 " = '" + newName + "' WHERE " + ID + " = '" + id + "'" +
@@ -113,11 +130,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
      * @param id
      * @param name
      */
-    public void deleteName(int id, String name){
+    public void deleteName(String id, String name){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "DELETE FROM " + TABLE_NAME + " WHERE "
-                + ID + " = '" + id + "'" +
-                " AND " + ITEM + " = '" + name + "'";
+                + ITEM + " = '" + name + "'";
+//                " AND "  + ITEM + " = '" + name + "'";
         Log.d(TAG, "deleteName: query: " + query);
         Log.d(TAG, "deleteName: Deleting " + name + " from database.");
         db.execSQL(query);

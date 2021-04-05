@@ -24,14 +24,14 @@ public class EditDataActivity extends AppCompatActivity {
 
     private static final String TAG = "EditDataActivity";
 
-    private Button btnSave,btnDelete, btnStatus;
+    private Button btnSave,btnDelete, btnStatus, btnBackToList;
     private EditText editable_item;
 
     DatabaseHelper mDatabaseHelper;
     DatabaseHelper pDatabseHelper;
 
     private String selectedName;
-    private int selectedID;
+    private String selectedID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class EditDataActivity extends AppCompatActivity {
         btnSave = (Button) findViewById(R.id.btnSave);
         btnDelete = (Button) findViewById(R.id.btnDelete);
         btnStatus = (Button) findViewById(R.id.btnStatus);
+        btnBackToList = (Button) findViewById(R.id.btnBackToList);
         editable_item = (EditText) findViewById(R.id.editable_item);
         mDatabaseHelper = new DatabaseHelper(this);
         pDatabseHelper = new DatabaseHelper(this);
@@ -47,7 +48,7 @@ public class EditDataActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
 
         //now get the itemID we passed as an extra
-        selectedID = receivedIntent.getIntExtra("id",-1); //NOTE: -1 is just the default value
+        selectedID = receivedIntent.getStringExtra("id"); //NOTE: -1 is just the default value
 
         //now get the name we passed as an extra
         selectedName = receivedIntent.getStringExtra("name");
@@ -115,6 +116,14 @@ public class EditDataActivity extends AppCompatActivity {
 
 
         });
+
+        btnBackToList.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent infoIntent = new Intent(EditDataActivity.this, ListDataActivity.class);
+                startActivity(infoIntent);
+            }
+        }));
 
     }
 

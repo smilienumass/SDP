@@ -2,21 +2,49 @@
 <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    android:layout_width="match_parent"-->
 <!--    android:layout_height="match_parent"/>-->
-
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools= "http://schemas.android.com/tools"
-    android:id= "@+id/tableLayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:stretchColumns="*">
-</TableLayout>
+    android:layout_height="match_parent">
 
-<!--<TableLayout xmlns:android=" http://schemas.android.com/apk/res/android"-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout1">
+
+        <Button
+            android:id="@+id/btnReadBag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Bag" />
+
+        <Button
+            android:id="@+id/btnReadLogs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="143dp"
+            android:text="Read Logs" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp">
+        <TableLayout
+            android:id= "@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*">
+        </TableLayout>
+    </RelativeLayout>
+
+    <!--<TableLayout xmlns:android=" http://schemas.android.com/apk/res/android"-->
 <!--xmlns:tools= "http://schemas.android.com/tools"-->
 <!--android:id= "@+id/tablelayout"-->
 <!--android:layout_width= "match_parent"-->
 <!--android:layout_height= "match_parent"-->
 <!--android:stretchColumns="*"-->
-
+    </RelativeLayout>
 <!--    >-->
 <!--</TableLayout>-->

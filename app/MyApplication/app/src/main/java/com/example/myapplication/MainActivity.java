@@ -22,6 +22,8 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -44,21 +46,25 @@ public class MainActivity extends AppCompatActivity {
     //SQLite
     DatabaseHelper mDatabaseHelper;
     DatabaseHelperPi lDatabaseHelper;
-    private Button btnAdd, btnViewData, btnViewBag;
+    private Button btnAdd, btnViewData, btnViewBag, btnTrips, btnCheckBag;
     private EditText editText;
     HashMap<String, String> map;
      //   SQLite
 
     // Bluetooth
-    Button enablebt,disablebt,scanbt;
-    BluetoothSocket btSocket = null;
-    private BluetoothAdapter BTAdapter;
-    private Set<BluetoothDevice>pairedDevices;
-    ListView lv;
-    public final static String EXTRA_ADDRESS = null;
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+//    Button enablebt,disablebt,scanbt;
+//    BluetoothSocket btSocket = null;
+//    private BluetoothAdapter BTAdapter;
+//    private Set<BluetoothDevice>pairedDevices;
+//    ListView lv;
+//    public final static String EXTRA_ADDRESS = null;
+//    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     //// Bluetooth
 
+    // Write a message to the database
+//    FirebaseDatabase da = FirebaseDatabase.getInstance();
+//    DatabaseReference myRef = da.getReference("message");
+//    DatabaseReference myChildRef  = myRef.child("message");
 
 
 
@@ -68,23 +74,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Bluetooth
-        enablebt=(Button)findViewById(R.id.button_enablebt);
-        disablebt=(Button)findViewById(R.id.button_disablebt);
-        scanbt=(Button)findViewById(R.id.button_scanbt);
-
-        BTAdapter = BluetoothAdapter.getDefaultAdapter();
-        lv = (ListView)findViewById(R.id.listViewB);
-        if (BTAdapter.isEnabled()){
-            scanbt.setVisibility(View.VISIBLE);
-        }
+//        enablebt=(Button)findViewById(R.id.button_enablebt);
+//        disablebt=(Button)findViewById(R.id.button_disablebt);
+//        scanbt=(Button)findViewById(R.id.button_scanbt);  /// list devices
+//
+//        BTAdapter = BluetoothAdapter.getDefaultAdapter();
+//        lv = (ListView)findViewById(R.id.listViewB);
+//        if (BTAdapter.isEnabled()){
+//            scanbt.setVisibility(View.VISIBLE);
+//        }
         // bluetooth
 
 
-
+//        DatabaseReference postsRef = myRef.child("laptop");
+//        postsRef.setValue("123456");
+//        myRef.child("tooth").setValue("3455");
+////        postsRef.setValue("123456");
+//        myRef.setValue("Hello there!!!");
         editText = (EditText) findViewById(R.id.editText);
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btnViewData = (Button) findViewById(R.id.btnView);
         btnViewBag = (Button) findViewById(R.id.btnViewBag);
+        btnTrips = (Button) findViewById(R.id.btnTrips);
+        btnCheckBag = (Button) findViewById(R.id.btnCheckBag);
         mDatabaseHelper = new DatabaseHelper(this);
         lDatabaseHelper = new DatabaseHelperPi(this);
 
@@ -115,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     toastMessage("You must put something in the text field!");
                 }
-
             }
         });
 
@@ -128,17 +139,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //seeing your bag
-        btnViewBag.setOnClickListener(new View.OnClickListener() {
+
+        btnCheckBag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    SeeBag();
-                }
-                catch(JSONException e) {
-                    e.printStackTrace();
-                }
-                Intent intent = new Intent(MainActivity.this, ListCurrentItems.class);
+                Intent intent = new Intent(MainActivity.this, CheckBag.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //seeing your bag
+//        btnViewBag.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    SeeBag();
+//                }
+//                catch(JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                Intent intent = new Intent(MainActivity.this, ListCurrentItems.class);
+//                startActivity(intent);
+//            }
+//        });
+
+
+        btnTrips.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TripsActivity.class);
                 startActivity(intent);
             }
         });
@@ -149,52 +179,55 @@ public class MainActivity extends AppCompatActivity {
 
 
     //////////////////////////////////////////Bluetooth /////////////////////////////////////////////
-    public void on(View v){
-        if (!BTAdapter.isEnabled()) {
-            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(turnOn, 0);
-            Toast.makeText(getApplicationContext(), "Turned on",Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "Already on", Toast.LENGTH_SHORT).show();
-        }
-        scanbt.setVisibility(View.VISIBLE);
-        lv.setVisibility(View.VISIBLE);
-    }
-
-    public void off(View v){
-        BTAdapter.disable();
-        Toast.makeText(getApplicationContext(), "Turned off" ,Toast.LENGTH_SHORT).show();
-        scanbt.setVisibility(View.INVISIBLE);
-        lv.setVisibility(View.GONE);
-    }
-
-    public void deviceList(View v){
-        ArrayList deviceList = new ArrayList();
-        pairedDevices = BTAdapter.getBondedDevices();
-
-        if (pairedDevices.size() < 1) {
-            Toast.makeText(getApplicationContext(), "No paired devices found", Toast.LENGTH_SHORT).show();
-        } else {
-            for (BluetoothDevice bt : pairedDevices) deviceList.add(bt.getName() + " " + bt.getAddress());
-            Toast.makeText(getApplicationContext(), "Showing paired devices", Toast.LENGTH_SHORT).show();
-            final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceList);
-            lv.setAdapter(adapter);
-            lv.setOnItemClickListener(myListClickListener);
-        }
-    }
-    private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String info = ((TextView) view).getText().toString();
-            String address = info.substring(info.length() - 17);
-            Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, BluetoothConnection.class);
-            intent.putExtra(EXTRA_ADDRESS, address);
-            startActivity(intent);
-        }
-    };
+//    public void on(View v){
+//        if (!BTAdapter.isEnabled()) {
+//            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(turnOn, 0);
+//            Toast.makeText(getApplicationContext(), "Turned on",Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(getApplicationContext(), "Already on", Toast.LENGTH_SHORT).show();
+//        }
+//        scanbt.setVisibility(View.VISIBLE);
+//        lv.setVisibility(View.VISIBLE);
+//    }
+//
+//    public void off(View v){
+//        BTAdapter.disable();
+//        Toast.makeText(getApplicationContext(), "Turned off" ,Toast.LENGTH_SHORT).show();
+//        scanbt.setVisibility(View.INVISIBLE);
+//        lv.setVisibility(View.GONE);
+//    }
+//
+//    public void deviceList(View v){
+//        ArrayList deviceList = new ArrayList();
+//        pairedDevices = BTAdapter.getBondedDevices();
+//
+//        if (pairedDevices.size() < 1) {
+//            Toast.makeText(getApplicationContext(), "No paired devices found", Toast.LENGTH_SHORT).show();
+//        } else {
+//            for (BluetoothDevice bt : pairedDevices) deviceList.add(bt.getName() + " " + bt.getAddress());
+//            Toast.makeText(getApplicationContext(), "Showing paired devices", Toast.LENGTH_SHORT).show();
+//            final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceList);
+//            lv.setAdapter(adapter);
+//            lv.setOnItemClickListener(myListClickListener);
+//        }
+//    }
+//    private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener() {
+//
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            String info = ((TextView) view).getText().toString();
+//            String address = info.substring(info.length() - 17);
+//            Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(MainActivity.this, BluetoothConnection.class);
+//            intent.putExtra(EXTRA_ADDRESS, address);
+//            startActivity(intent);
+//        }
+//    };
     ///////////////////////////Bluetooth////////
+
+
+
 
     // to add trip items
     public void AddData(String newEntry) {
@@ -208,9 +241,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
 ////    //Need a check bag button??
     public void SeeBag() throws JSONException {
-        lDatabaseHelper.seeBag( map);
+//        lDatabaseHelper.seeBag(map);
+        return;
+
     }
 
     /**

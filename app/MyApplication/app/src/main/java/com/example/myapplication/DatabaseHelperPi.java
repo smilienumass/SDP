@@ -19,6 +19,10 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+//this is for the saving the items from the pi
 
 public class DatabaseHelperPi extends SQLiteOpenHelper{
 
@@ -29,8 +33,8 @@ public class DatabaseHelperPi extends SQLiteOpenHelper{
     private static final String ITEM = "name";
     private static final String TIME = "timestamp";
 
-
-
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference logged_items_ref = database.getReference("Logged_items_table");
 
     public DatabaseHelperPi(Context context) {
         super(context, NAME, null, 1);
@@ -54,30 +58,40 @@ public class DatabaseHelperPi extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean seeBag(HashMap<String, String> map) throws JSONException {
+    public boolean seeBag(HashMap<String, String> map, String json) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(NAME, null, null);
         ContentValues contentValues = new ContentValues();
 
 
-        String json = "{\"RSSI\":-27,\"Phase\":33,\"Readcount\":10,\"EPC\":\"E2004078410B02391140A53F\",\"Timestamp\":\"2020-11-06T13:00:01.336-0500\"}\n" +
-                "{\"RSSI\":-57,\"Phase\":56,\"Readcount\":9,\"EPC\":\"E2004078410B01901140A4D7\",\"Timestamp\":\"2020-11-06T13:00:01.355-0500\"}\n" +
-                "{\"RSSI\":-45,\"Phase\":45,\"Readcount\":10,\"EPC\":\"E2004078410B02151140A50F\",\"Timestamp\":\"2020-11-06T13:00:01.365-0500\"}\n" +
-                "{\"RSSI\":-36,\"Phase\":132,\"Readcount\":10,\"EPC\":\"E2004078410B02561140A558\",\"Timestamp\":\"2020-11-06T13:00:01.340-0500\"}\n" +
-                "{\"RSSI\":-46,\"Phase\":137,\"Readcount\":11,\"EPC\":\"E2004078410B01921140A4D8\",\"Timestamp\":\"2020-11-06T13:00:01.377-0500\"}\n" +
-                "{\"RSSI\":-37,\"Phase\":106,\"Readcount\":10,\"EPC\":\"E2004078410B02161140A508\",\"Timestamp\":\"2020-11-06T13:00:01.347-0500\"}\n" +
-                "{\"RSSI\":-49,\"Phase\":56,\"Readcount\":11,\"EPC\":\"E2004078410B02321140A528\",\"Timestamp\":\"2020-11-06T13:00:01.384-0500\"}" ;
+//        String json = "{\"RSSI\":-27,\"Phase\":33,\"Readcount\":10,\"EPC\":\"E2004078410B02391140A53F\",\"Timestamp\":\"2020-11-06T13:00:01.336-0500\"}\n" +
+//                "{\"RSSI\":-57,\"Phase\":56,\"Readcount\":9,\"EPC\":\"E2004078410B01901140A4D7\",\"Timestamp\":\"2020-11-06T13:00:01.355-0500\"}\n" +
+//                "{\"RSSI\":-45,\"Phase\":45,\"Readcount\":10,\"EPC\":\"E2004078410B02151140A50F\",\"Timestamp\":\"2020-11-06T13:00:01.365-0500\"}\n" +
+//                "{\"RSSI\":-36,\"Phase\":132,\"Readcount\":10,\"EPC\":\"E2004078410B02561140A558\",\"Timestamp\":\"2020-11-06T13:00:01.340-0500\"}\n" +
+//                "{\"RSSI\":-46,\"Phase\":137,\"Readcount\":11,\"EPC\":\"E2004078410B01921140A4D8\",\"Timestamp\":\"2020-11-06T13:00:01.377-0500\"}\n" +
+//                "{\"RSSI\":-37,\"Phase\":106,\"Readcount\":10,\"EPC\":\"E2004078410B02161140A508\",\"Timestamp\":\"2020-11-06T13:00:01.347-0500\"}\n" +
+//                "{\"RSSI\":-49,\"Phase\":56,\"Readcount\":11,\"EPC\":\"E2004078410B02321140A528\",\"Timestamp\":\"2020-11-06T13:00:01.384-0500\"}" ;
 
 
         String[] j = json.split("\n");
         for( int i = 0; i<j.length; i++){
             JSONObject jsonObject  = new JSONObject(j[i]);
 
+
             String tag_id = jsonObject.get("EPC").toString();
             contentValues.put(ID, tag_id);
 
             contentValues.put(ITEM, map.get(tag_id));
             contentValues.put(TIME, jsonObject.get("Timestamp").toString());
+
+
+            DatabaseReference itemsRef = logged_items_ref.child(tag_id);
+//            itemsRef.setValue(tag_id);
+            DatabaseReference infoRef  = itemsRef.child("Item Name");
+            infoRef.setValue(map.get(tag_id));
+            infoRef.child("Timestamp").setValue(jsonObject.get("Timestamp").toString());
+
+
             long result = db.insert(NAME, null, contentValues);
 
             Log.i("Insert", result + "");

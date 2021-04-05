@@ -24,6 +24,9 @@ import java.util.ArrayList;
 //import android.support.annotation.Nullable;
 //import android.support.v7.app.AppCompatActivity;
 
+
+
+// this display listview of items SQLite database
 public class ListDataActivity extends AppCompatActivity {
 
     private static final String TAG = "ListDataActivity";
@@ -68,14 +71,13 @@ public class ListDataActivity extends AppCompatActivity {
                 Log.d(TAG, "onItemClick: You Clicked on " + name);
 
                 Cursor data = mDatabaseHelper.getItemID(name); //get the id associated with that name
-
-
-                int itemID = -1;
+                String itemID = " ";
                 while(data.moveToNext()){
-                    itemID = data.getInt(0);
+                    itemID = data.getString(0);
+
 
                 }
-                if(itemID > -1){
+                if(!itemID.equals(" ")){
                     Log.d(TAG, "onItemClick: The ID is: " + itemID);
                     Intent editScreenIntent = new Intent(ListDataActivity.this, EditDataActivity.class);
                     editScreenIntent.putExtra("id",itemID);

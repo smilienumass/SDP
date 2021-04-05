@@ -84,6 +84,8 @@ public class BluetoothConnection extends AppCompatActivity {
                 String readMessage = new String(buffer, 0, bytes);
                 Log.d(TAG, "Received: " + readMessage);
                 TextView itemsInBag = (TextView) findViewById(R.id.items);
+
+
                 itemsInBag.setText("\nIncoming Data: \n" + readMessage + "");
                 mmSocket.close();
             } catch (IOException e) {
@@ -96,13 +98,15 @@ public class BluetoothConnection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bluetooth_connection);
+//        setContentView(R.layout.bluetooth_connection);
+        setContentView(R.layout.logged_items_layout);
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         final Intent intent = getIntent();
-        final String address = intent.getStringExtra(MainActivity.EXTRA_ADDRESS);
-        Button viewBagButton = (Button) findViewById(R.id.readBag);
-        Button chegLogBtn = (Button) findViewById(R.id.checkLog);
+//        final String address = intent.getStringExtra(MainActivity.EXTRA_ADDRESS);
+        final String address = "123";
+        Button viewBagButton = (Button) findViewById(R.id.btnReadBag);
+        Button chegLogBtn = (Button) findViewById(R.id.btnReadLogs);
 
         viewBagButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -131,6 +135,7 @@ public class BluetoothConnection extends AppCompatActivity {
             startActivityForResult(enableBluetooth, 0);
         }
     }
+
     @Override
     protected void onStop() {
         super.onStop();

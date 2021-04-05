@@ -26,12 +26,18 @@
         <activity android:name=".ListCurrentItems"></activity>
         <activity android:name=".ItemsInfo"></activity>
         <activity android:name=".BluetoothConnection"
+
             android:parentActivityName=".MainActivity" >
 <!--            &lt;!&ndash; The meta-data tag is required if you support API level 15 and lower &ndash;&gt;-->
 <!--            <meta-data-->
 <!--                android:name="android.support.PARENT_ACTIVITY"-->
 <!--                android:value=".MainActivity" />-->
         </activity>
+
+        <activity android:name=".TripsActivity"></activity>
+        <activity android:name=".CreateNewTrip"></activity>
+        <activity android:name=".CheckBag"></activity>
+
     </application>
 
 </manifest>

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
     <Button
         android:id="@+id/button_enablebt2"
@@ -32,7 +33,8 @@
     <ListView
         android:id="@+id/listViewDevice"
         android:layout_width="match_parent"
-        android:layout_height="539dp"
+        android:layout_height="70dp"
         android:layout_below="@id/button_scanbt2"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFFF" />
 </RelativeLayout>

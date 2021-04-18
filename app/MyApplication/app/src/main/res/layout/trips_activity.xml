@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000">
 
     <Button
         android:id="@+id/btnNewTrip"
         android:layout_width="260dp"
         android:layout_height="89dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="110dp"
         android:text="Create New Trip"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="51dp" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnCurrentTrip"
         android:layout_width="260dp"
         android:layout_height="89dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="110dp"
         android:text="Current Trip"
-        app:layout_constraintTop_toBottomOf="@+id/btnNewTrip"
-        tools:layout_editor_absoluteX="51dp" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNewTrip" />
 
-    <Button
-        android:id="@+id/btnSavedTrip"
-        android:layout_width="260dp"
-        android:layout_height="89dp"
-        android:layout_marginTop="120dp"
-        android:text="Saved Trips"
-        app:layout_constraintTop_toBottomOf="@+id/btnCurrentTrip"
-        tools:layout_editor_absoluteX="51dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

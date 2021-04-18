@@ -22,7 +22,7 @@ public class ItemsInfo extends AppCompatActivity{
 
     private static final String TAG = "ItemsInfo";
 
-    DatabaseHelper mDatabaseHelper;
+
     DatabaseHelperPi pDatabseHelper;
 
     private String selectedName;
@@ -74,6 +74,7 @@ public class ItemsInfo extends AppCompatActivity{
             else{
                 info.add("NOT IN BAG");
             }
+
             ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, info);
             mListView.setAdapter(adapter);
         }

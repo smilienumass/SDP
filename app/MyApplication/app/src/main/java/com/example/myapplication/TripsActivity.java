@@ -55,7 +55,7 @@ public class TripsActivity extends AppCompatActivity {
 
         btnNewTrip = (Button) findViewById(R.id.btnNewTrip);
         btnCurrTrip = (Button) findViewById(R.id.btnCurrentTrip);
-        btnSavedTrips = (Button) findViewById(R.id.btnSavedTrip);
+//        btnSavedTrips = (Button) findViewById(R.id.btnSavedTrip);
 
 
 

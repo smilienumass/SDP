@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout1">
+        android:id="@+id/relativeLayout2">
 
         <Button
             android:id="@+id/btnReadBag"
@@ -25,18 +25,35 @@
             android:layout_marginLeft="143dp"
             android:text="Read Logs" />
 
+        <Button
+            android:id="@+id/btnBagHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_toRightOf="@id/btnReadLogs"
+            android:text="Bag History" />
+
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp">
+
         <TableLayout
-            android:id= "@+id/tableLayout"
+            android:id="@+id/tableLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:stretchColumns="*">
-        </TableLayout>
+            android:layout_height="380dp"
+            android:stretchColumns="*"></TableLayout>
+
+        <TextView
+            android:id="@+id/items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="390dp"
+            android:height="300dp"
+            android:text="TextView" />
     </RelativeLayout>
 
     <!--<TableLayout xmlns:android=" http://schemas.android.com/apk/res/android"-->

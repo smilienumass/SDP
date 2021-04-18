@@ -40,7 +40,7 @@ public class EditDataActivity extends AppCompatActivity {
         btnSave = (Button) findViewById(R.id.btnSave);
         btnDelete = (Button) findViewById(R.id.btnDelete);
         btnStatus = (Button) findViewById(R.id.btnStatus);
-        btnBackToList = (Button) findViewById(R.id.btnBackToList);
+//        btnBackToList = (Button) findViewById(R.id.btnBackToList);
         editable_item = (EditText) findViewById(R.id.editable_item);
         mDatabaseHelper = new DatabaseHelper(this);
         pDatabseHelper = new DatabaseHelper(this);
@@ -117,13 +117,13 @@ public class EditDataActivity extends AppCompatActivity {
 
         });
 
-        btnBackToList.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent infoIntent = new Intent(EditDataActivity.this, ListDataActivity.class);
-                startActivity(infoIntent);
-            }
-        }));
+//        btnBackToList.setOnClickListener((new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent infoIntent = new Intent(EditDataActivity.this, ListDataActivity.class);
+//                startActivity(infoIntent);
+//            }
+//        }));
 
     }
 

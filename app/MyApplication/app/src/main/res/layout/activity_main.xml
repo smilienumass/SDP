@@ -2,109 +2,127 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<!--    tools:context="com.tabian.saveanddisplaysql.MainActivity">-->
+    android:layout_height="match_parent"
+    android:background="#050505">
+    <!--    tools:context="com.tabian.saveanddisplaysql.MainActivity">-->
 
     <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="wrap_content"
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="100dp"
-            android:textAlignment="center"
-            android:gravity="center_horizontal" />
+
+        <!--        <Button-->
+        <!--            android:id="@+id/btnAdd"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Add" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/btnView"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginLeft="64dp"-->
+        <!--            android:layout_toRightOf="@+id/btnAdd"-->
+        <!--            android:text="View Data" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/btnViewBag"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginLeft="64dp"-->
+        <!--            android:layout_toRightOf="@+id/btnView"-->
+        <!--            android:rotationX="0"-->
+        <!--            android:text="View Bag" />-->
+
+
+        <!--    bluettoth -->
+        <!--        <Button-->
+        <!--            android:id="@+id/button_enablebt"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="200dp"-->
+        <!--            android:onClick="on"-->
+        <!--            android:text="@string/enablebt" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/button_disablebt"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_alignParentRight="true"-->
+        <!--            android:layout_marginTop="200dp"-->
+        <!--            android:onClick="off"-->
+        <!--            android:text="@string/disablebt" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/button_scanbt"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_centerHorizontal="true"-->
+        <!--            android:layout_marginTop="200dp"-->
+        <!--            android:onClick="deviceList"-->
+        <!--            android:text="@string/scanbt"-->
+        <!--            android:visibility="visible" />-->
+
+        <!--        <ListView-->
+        <!--            android:id="@+id/listViewDevice"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_below="@id/button_scanbt"-->
+        <!--            android:layout_marginTop="-4dp" />-->
+
+        <Button
+            android:id="@+id/btnTrips"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="194dp"
+            android:layout_height="82dp"
+            android:layout_alignParentBottom="false"
+            android:layout_marginStart="100dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="75dp"
+            android:text="Trips"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnCheckBag"
+            android:layout_width="194dp"
+            android:layout_height="82dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="275dp"
+            android:text="Check Bag"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnRegisterMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="475dp"
+            android:width="194dp"
+            android:height="82dp"
+            android:text="Register"
+            android:textStyle="bold" />
+
+
+        <!--        bluet-->
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout1"
-        android:layout_marginTop="30dp">
+        android:layout_height="50dp"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_marginTop="0dp">
+
 
         <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add" />
-
-        <Button
-            android:id="@+id/btnCheckBag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="65dp"
-            android:layout_marginBottom="-1dp"
-            android:layout_toRightOf="@id/btnTrips"
-            android:text="Check Bag" />
-
-        <Button
-            android:id="@+id/btnView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="64dp"
-            android:layout_toRightOf="@+id/btnAdd"
-            android:text="View Data" />
-
-        <Button
-            android:id="@+id/btnViewBag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="64dp"
-            android:layout_toRightOf="@+id/btnView"
-            android:rotationX="0"
-            android:text="View Bag" />
-
-
-        <!--    bluettoth -->
-        <Button
-            android:id="@+id/button_enablebt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-            android:onClick="on"
-            android:text="@string/enablebt" />
-
-        <Button
-            android:id="@+id/button_disablebt"
+            android:id="@+id/btnClear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="200dp"
-            android:onClick="off"
-            android:text="@string/disablebt" />
-
-        <Button
-            android:id="@+id/button_scanbt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="200dp"
-            android:onClick="deviceList"
-            android:text="@string/scanbt"
-            android:visibility="visible" />
-
-        <ListView
-            android:id="@+id/listViewDevice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/button_scanbt"
-            android:layout_marginTop="-4dp" />
-
-        <Button
-            android:id="@+id/btnTrips"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="Trips" />
-
-
-        <!--        bluet-->
-
+            android:text="Clear" />
     </RelativeLayout>
 
 </RelativeLayout>

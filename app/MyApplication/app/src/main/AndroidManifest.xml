@@ -25,18 +25,24 @@
         <activity android:name=".EditDataActivity"></activity>
         <activity android:name=".ListCurrentItems"></activity>
         <activity android:name=".ItemsInfo"></activity>
-        <activity android:name=".BluetoothConnection"
+<!--        <activity android:name=".BluetoothConnection"-->
 
-            android:parentActivityName=".MainActivity" >
-<!--            &lt;!&ndash; The meta-data tag is required if you support API level 15 and lower &ndash;&gt;-->
-<!--            <meta-data-->
-<!--                android:name="android.support.PARENT_ACTIVITY"-->
-<!--                android:value=".MainActivity" />-->
-        </activity>
+<!--            android:parentActivityName=".MainActivity" >-->
+<!--&lt;!&ndash;            &lt;!&ndash; The meta-data tag is required if you support API level 15 and lower &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <meta-data&ndash;&gt;-->
+<!--&lt;!&ndash;                android:name="android.support.PARENT_ACTIVITY"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:value=".MainActivity" />&ndash;&gt;-->
+<!--        </activity>-->
 
         <activity android:name=".TripsActivity"></activity>
         <activity android:name=".CreateNewTrip"></activity>
         <activity android:name=".CheckBag"></activity>
+        <activity android:name=".RegisterConnect"></activity>
+        <activity android:name=".RegisterMode"></activity>
+        <activity android:name=".LogEvents"></activity>
+        <activity android:name=".LogInfo"></activity>
+        <activity android:name=".BagHistory"></activity>
+
 
     </application>
 

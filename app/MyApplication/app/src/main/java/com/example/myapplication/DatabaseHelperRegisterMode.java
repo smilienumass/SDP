@@ -60,7 +60,6 @@ public class DatabaseHelperRegisterMode extends SQLiteOpenHelper {
     }
 
 
-
     public String addData(  String json, String itemName) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
 //        db.delete(NAME, null, null);
@@ -69,7 +68,6 @@ public class DatabaseHelperRegisterMode extends SQLiteOpenHelper {
         String tag_id="";
 
         String[] j = json.split("\n");
-//        for( int i = 0; i<j.length; i++){
         for( int i = 0; i<1; i++){
 
             JSONObject jsonObject  = new JSONObject(j[i]);
@@ -86,7 +84,7 @@ public class DatabaseHelperRegisterMode extends SQLiteOpenHelper {
 
             long result = db.insert(NAME, null, contentValues);
 
-            Log.i("Insert", result + "");
+//            Log.i("Insert", result + "");
         }
 
 

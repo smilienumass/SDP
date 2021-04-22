@@ -1,16 +1,9 @@
 package com.example.myapplication;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,16 +15,8 @@ import android.widget.Toast;
 
 import android.widget.TableLayout;
 import androidx.annotation.Nullable;
-
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+
 
 public class LogInfo extends AppCompatActivity{
     private static final String TAG = "LogInfo";

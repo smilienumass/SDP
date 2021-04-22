@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelperPi bDatabaseHelper;
     DatabaseHelperLogPi lDatabaseHelper;
     DatabaseHelperRegisterMode rDatabaseHelper;
+    DatabaseHelperReadHistory hDatabaseHelper;
     private Button btnTrips, btnCheckBag, btnRegisterMode, btnClear;
 
 
@@ -33,23 +34,8 @@ public class MainActivity extends AppCompatActivity {
         bDatabaseHelper = new DatabaseHelperPi(this);
         lDatabaseHelper = new DatabaseHelperLogPi(this);
         rDatabaseHelper = new DatabaseHelperRegisterMode(this);
+        hDatabaseHelper = new DatabaseHelperReadHistory(this);
 
-
-        //
-//            map = new HashMap<>();
-//            map.put( "E2004078410B02391140A53F","toothbrush");
-//            map.put("E2004078410B01901140A4D7", "laptop");
-//            map.put("E2004078410B02151140A50F", "shoes");
-//            map.put("E2004078410B02561140A558", "toothpaste");
-//            map.put("E2004078410B01921140A4D8", "shirt");
-//            map.put("E2004078410B02161140A508", "pants");
-//            map.put("E2004078410B02321140A528", "charger");
-//            map.put("E2004078410B02141140A507", "jacket");
-//            map.put("E2004078410B02411140A540", "sweater");
-//            map.put("30342B1B4834739059BFEB5B", "ipad");
-
-//
-//
 
         btnCheckBag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 lDatabaseHelper.deleteTable();
                 rDatabaseHelper.deleteTable();
                 bDatabaseHelper.deleteTable();
+                hDatabaseHelper.deleteTable();
                 Log.d(TAG, "All clear" );
                 toastMessage("App all clear");
             }

@@ -35,9 +35,9 @@ public class DatabaseHelperPi extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + NAME
-                + " (" + ID +" TEXT, "
+                + " (" + ID +" TEXT PRIMARY KEY, "
                 + ITEM +" TEXT, "
-                + TIME +" TIMESTAMP PRIMARY KEY)";
+                + TIME +" TIMESTAMP)";
 
         db.execSQL(createTable);
         Log.d(TAG, "Database tables created");
@@ -46,15 +46,14 @@ public class DatabaseHelperPi extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP IF TABLE EXISTS " + NAME);
-//        db.delete(NAME, null, null);
+        db.delete(NAME, null, null);
         onCreate(db);
     }
 
     public boolean seeBag( DatabaseHelperRegisterMode database, String json) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(NAME, null, null);
-//        db.execSQL("DELETE FROM " + NAME);
-
+//        db.delete(NAME, null, null);
+        db.execSQL("DELETE FROM " + NAME);
         ContentValues contentValues = new ContentValues();
 
 
@@ -83,7 +82,6 @@ public class DatabaseHelperPi extends SQLiteOpenHelper{
             }
 
 //            contentValues.put(ITEM, map.get(tag_id));
-
             if(item==null){
                 item = "NA";
             }
@@ -91,12 +89,12 @@ public class DatabaseHelperPi extends SQLiteOpenHelper{
             contentValues.put(ITEM, item);
 //            DatabaseReference itemsRef = logged_items_ref.child(map.get(tag_id));
 
-            DatabaseReference itemsRef = logged_items_ref.child(item+" "+ tag_id);
+            DatabaseReference itemsRef = logged_items_ref.child(item);
             itemsRef.setValue(j[i]);
 
             long result = db.insert(NAME, null, contentValues);
 
-            Log.i("Insert", result + "");
+//            Log.i("Insert", result + "");
         }
 
 

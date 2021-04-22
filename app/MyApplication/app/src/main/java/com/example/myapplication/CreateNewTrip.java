@@ -55,7 +55,7 @@ public class CreateNewTrip extends AppCompatActivity {
     ArrayList arrayRegistered;
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
+        mDatabaseHelper.deleteTable();
         int id = item.getItemId();
         if(id == R.id.item_done){
             String itemSelected = "Selected items: \n";
@@ -97,7 +97,6 @@ public class CreateNewTrip extends AppCompatActivity {
 //        }
 
         Cursor register_data = rDatabaseHelper.getData();
-
         if(register_data.getCount()>0){
             while (register_data.moveToNext()){
                 arrayRegistered.add(register_data.getString(register_data.getColumnIndex("name")));

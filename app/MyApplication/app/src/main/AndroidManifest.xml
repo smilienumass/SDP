@@ -42,7 +42,7 @@
         <activity android:name=".LogEvents"></activity>
         <activity android:name=".LogInfo"></activity>
         <activity android:name=".BagHistory"></activity>
-
+        <activity android:name=".HistoryInfo"></activity>
 
     </application>
 

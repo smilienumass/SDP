@@ -23,6 +23,9 @@ import android.widget.TableLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +33,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.HashMap;
 
 
 public class ListCurrentItems extends AppCompatActivity {
@@ -40,6 +44,9 @@ public class ListCurrentItems extends AppCompatActivity {
     DatabaseHelper curDatabaseHelper;
     DatabaseHelperRegisterMode regDatabaseHelper;
     DatabaseHelperPi bDatabaseHelper;
+
+    FirebaseDatabase firedatabase = FirebaseDatabase.getInstance();
+    DatabaseReference bag_history_ref = firedatabase.getReference("bag_history_table");
 
     private ListView lListView;
     private TableLayout tableLayout;
@@ -104,9 +111,9 @@ public class ListCurrentItems extends AppCompatActivity {
                 Log.d(TAG, "Received: " + readMessage);
 
                 if(!readMessage.equals("No Items read from bag")){
+                    database.deleteTable();
                     database.seeBag(regDatabaseHelper, readMessage);
                 }
-
                 mmSocket.close();
             } catch (IOException e) {
                 Log.e(TAG, "Problems occurred!");
@@ -168,9 +175,9 @@ public class ListCurrentItems extends AppCompatActivity {
                 checkRecRead = readMessage;
                 if(!readMessage.equals("No Items read from bag")) {
 //                    list.add(readMessage);
-                    TextView itemsInBag = (TextView) findViewById(R.id.items);
-                    itemsInBag.setText("\nIncoming Data: \n" + readMessage + "");
-//                    database.addToDB(regDatabaseHelper, readMessage);
+//                    TextView itemsInBag = (TextView) findViewById(R.id.items);
+//                    itemsInBag.setText("\nIncoming Data: \n" + readMessage + "");
+                    database.addToDB(regDatabaseHelper, readMessage);
                     sendVerify("recTags");
                 }
                 mmSocket.close();
@@ -179,10 +186,7 @@ public class ListCurrentItems extends AppCompatActivity {
                 return;
             }
         }
-
     }
-
-
 
 
     public class ConnectThreadLogs extends Thread {
@@ -205,7 +209,6 @@ public class ListCurrentItems extends AppCompatActivity {
                 try {
                     mmSocket.close();
                 } catch (IOException closeException) {
-
                 }
             }
             send(msg, database);
@@ -235,17 +238,12 @@ public class ListCurrentItems extends AppCompatActivity {
             try {
                 bytes = mmInputStream.read(buffer);
                 String readMessage = new String(buffer, 0, bytes);
-
-//                ArrayList<String> missedLogs = new ArrayList<>();
                 Log.d(TAG, "Received: " + readMessage);
                 checkRecLog = readMessage;
                 if(!readMessage.equals("No events")) {
                     database.seeLog(readMessage);
                     sendVerify("recLogs");
                 }
-
-//                itemsInBag.setText("\nIncoming Data: \n" + readMessage + "");
-
                 mmSocket.close();
             } catch (IOException e) {
                 Log.e(TAG, "Problems occurred!");
@@ -253,7 +251,6 @@ public class ListCurrentItems extends AppCompatActivity {
             }
         }
     }
-
 
 
 
@@ -279,8 +276,7 @@ public class ListCurrentItems extends AppCompatActivity {
         bDatabaseHelper  = new DatabaseHelperPi(this);
         checkRecLog = "start";
         checkRecRead = "start";
-        list = new ArrayList<>();
-        makeTable();
+//        makeTable();
         viewBagButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final BluetoothDevice device = BTAdapter.getRemoteDevice(address);
@@ -302,37 +298,30 @@ public class ListCurrentItems extends AppCompatActivity {
                     while(!checkRecLog.equals("No events")) {
                         new ListCurrentItems.ConnectThreadLogs(device, "checkLog", lDatabaseHelper).start();
                     }
-
-                    Intent intent = new Intent(ListCurrentItems.this, LogEvents.class);
-                    startActivity(intent);
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
+                Intent intent = new Intent(ListCurrentItems.this, LogEvents.class);
+                startActivity(intent);
             }
         });
-
 
         btnBagHistory.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final BluetoothDevice device = BTAdapter.getRemoteDevice(address);
                 try {
-
                     while(!checkRecRead.equals("No Items read from bag")) {
                         new ListCurrentItems.ConnectThreadHistory(device, "readHistory", bagDatabaseHelper).start();
                     }
 
-
-                    // add / show last entry
-//                    makeTable();
-//                    populateTable(bDatabaseHelper);
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
+                Intent intent = new Intent(ListCurrentItems.this, BagHistory.class);
+                startActivity(intent);
 //                Intent intent1  = new Intent(ListCurrentItems.this, BagHistory.class);
 //                startActivity(intent1);
             }
-
-
 
         });
 
@@ -342,29 +331,6 @@ public class ListCurrentItems extends AppCompatActivity {
         }
 
         ////////////////////////// bluetooth /////////////////////////////////////
-
-
-//        lListView = (ListView) findViewById(R.id.listView);
-//        tableLayout=(TableLayout)findViewById(R.id.tableLayout);
-//
-//        lDatabaseHelper = new DatabaseHelperPi(this);
-        // Add header row
-//        TableRow rowHeader = new TableRow(this);
-//        rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
-//        rowHeader.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
-//        String[] headerText={"ID","NAME", "TIMESTAMP"};
-//        for(String c:headerText) {
-//            TextView tv = new TextView(this);
-//            tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-//                    TableRow.LayoutParams.WRAP_CONTENT));
-//            tv.setGravity(Gravity.CENTER);
-//            tv.setTextSize(18);
-//            tv.setPadding(5, 5, 5, 5);
-//            tv.setText(c);
-//            rowHeader.addView(tv);
-//        }
-//        tableLayout.addView(rowHeader);
-//        populateTable();
     }
 
 
@@ -376,7 +342,9 @@ public class ListCurrentItems extends AppCompatActivity {
         TableRow rowHeader = new TableRow(this);
         rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
         rowHeader.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
-        String[] headerText={"NAME", "ID", "TIMESTAMP", "STATUS"};
+//        String[] headerText={"NAME", "ID", "TIMESTAMP", "STATUS"};
+        String[] headerText={"NAME", "TIMESTAMP", "STATUS"};
+
         for(String c:headerText) {
             TextView tv = new TextView(this);
             tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
@@ -399,9 +367,12 @@ public class ListCurrentItems extends AppCompatActivity {
         Cursor data;
         Cursor curdata =  curDatabaseHelper.getData();
         ArrayList registeredItems = new ArrayList();
-
+        makeTable();
+        tableLayout.removeAllViews();
+        makeTable();
 
         if(curdata.getCount() >0) {
+            //  IF data bringing on trip
             while (curdata.moveToNext()) {
                 // Read columns data
                 String id = curdata.getString(curdata.getColumnIndex("ID"));
@@ -416,9 +387,9 @@ public class ListCurrentItems extends AppCompatActivity {
                 if (data.getCount()>0){
                     status = true;
 //                    item_status = "IN BAG";
-                    Cursor temp = database.getItemTime(name);
-                    temp.moveToNext();
-                    time= temp.getString(0);
+                    Cursor t = database.getItemTime(name);
+                    t.moveToNext();
+                    time= t.getString(0);
 //                    time = temp.getString(0);
                 }
 
@@ -427,13 +398,23 @@ public class ListCurrentItems extends AppCompatActivity {
                 } else {
                     item_status = "NOT IN BAG";
                 }
+//                String oldStatus = curdata.getString(curdata.getColumnIndex("status"));
+//                curDatabaseHelper.updateStatus(item_status,id, oldStatus);
+
+//                userRef.child().update({'dateOfBirth': moment(value.dateOfBirth).toDate().getTime()})
+                DatabaseReference mPostReference= bag_history_ref;
+                HashMap<String, String> updateStatus = new HashMap<>();
+
+//                bag_history_ref.child().updateChildren({'dateOfBirth': moment(value.dateOfBirth).toDate().getTime()})
 
                 // data rows
                 TableRow row = new TableRow(this);
                 row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                         TableLayout.LayoutParams.WRAP_CONTENT));
 //                String[] colText={id+"",name,time};
-                String[] colText = {name, id, time, item_status};
+//                String[] colText = {name, id, time, item_status};
+                String[] colText = {name, time, item_status};
+
 
                 for (String text : colText) {
                     TextView tv = new TextView(this);
@@ -472,7 +453,10 @@ public class ListCurrentItems extends AppCompatActivity {
                     row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
 //                String[] colText={id+"",name,time};
-                    String[] colText={extra_name,extra_id,extra_time, extra_item_status};
+//                    String[] colText={extra_name,extra_id,extra_time, extra_item_status};
+                    String[] colText={extra_name,extra_time, extra_item_status};
+
+
 
                     for(String text:colText) {
                         TextView tv = new TextView(this);

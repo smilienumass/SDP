@@ -44,16 +44,9 @@
         <TableLayout
             android:id="@+id/tableLayout"
             android:layout_width="match_parent"
-            android:layout_height="380dp"
+            android:layout_height="match_parent"
             android:stretchColumns="*"></TableLayout>
 
-        <TextView
-            android:id="@+id/items"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="390dp"
-            android:height="300dp"
-            android:text="TextView" />
     </RelativeLayout>
 
     <!--<TableLayout xmlns:android=" http://schemas.android.com/apk/res/android"-->

@@ -34,145 +34,80 @@ import java.util.UUID;
 public class BagHistory extends AppCompatActivity {
     private static final String TAG = "BagHistory";
     DatabaseHelperReadHistory bagDatabaseHelper;
-    DatabaseHelperRegisterMode regDatabaseHelper;
-    DatabaseHelper curDatabaseHelper;
-    private TableLayout tableLayout;
+    private ListView mListView;
 
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_layout);
+        setContentView(R.layout.history_list);
 
         bagDatabaseHelper = new DatabaseHelperReadHistory(this);
-        curDatabaseHelper = new DatabaseHelper(this);
-        makeTable();
-        populateTable(bagDatabaseHelper);
+        mListView = (ListView) findViewById(R.id.listViewHistory);
+
+        populateListView();
     }
 
 
-    private void makeTable(){
-        tableLayout=(TableLayout)findViewById(R.id.tableLayout);
-
-//        lDatabaseHelper = new DatabaseHelperPi(this);
-        // Add header row
-        TableRow rowHeader = new TableRow(this);
-        rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
-        rowHeader.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
-        String[] headerText={"NAME", "ID", "TIMESTAMP", "STATUS"};
-        for(String c:headerText) {
-            TextView tv = new TextView(this);
-            tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
-            tv.setGravity(Gravity.CENTER);
-            tv.setTextSize(18);
-            tv.setPadding(5, 5, 5, 5);
-            tv.setText(c);
-            rowHeader.addView(tv);
-        }
-        tableLayout.addView(rowHeader);
-
-
-    }
-
-
-    private void populateTable(DatabaseHelperReadHistory database) {
-        Log.d(TAG, "populateTable: Displaying data in the TableLayout.");
+    private void populateListView() {
+        Log.d(TAG, "populateListView: Displaying data in the ListView.");
 
         //get the data and append to a list
-        Cursor data;
-        Cursor curdata =  curDatabaseHelper.getData();
-        ArrayList registeredItems = new ArrayList();
+        Cursor data = bagDatabaseHelper.getData();
+        ArrayList<String> listData = new ArrayList<>();
 
-//
-//        if(curdata.getCount() >0) {
-//            while (curdata.moveToNext()) {
-//
-//                // Read columns data
-//                String id = curdata.getString(curdata.getColumnIndex("ID"));
-//                String name = curdata.getString(curdata.getColumnIndex("name"));
-//                registeredItems.add(name);
-//                String time= "";
-//                String item_status = "";
-//
-//                ///Check if in bag
-//                boolean status = false;
-//                data = database.getItemID(name);
-//                if (data.getCount()>0){
-//                    status = true;
-////                    item_status = "IN BAG";
-//                    Cursor temp = database.getItemTime(name);
-//                    temp.moveToNext();
-//                    time= temp.getString(0);
-////                    time = temp.getString(0);
-//                }
-//
-////                String item_status;
-//                if (status) {
-//                    item_status = "IN BAG";
-//                } else {
-//                    item_status = "NOT IN BAG";
-//                }
-//
-//
-//                // data rows
-//                TableRow row = new TableRow(this);
-//                row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
-//                        TableLayout.LayoutParams.WRAP_CONTENT));
-////                String[] colText={id+"",name,time};
-//                String[] colText = {name, id, time, item_status};
-//
-//                for (String text : colText) {
-//                    TextView tv = new TextView(this);
-//                    tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-//                            TableRow.LayoutParams.WRAP_CONTENT));
-//                    tv.setGravity(Gravity.CENTER);
-//                    tv.setTextSize(10);
-//                    tv.setPadding(5, 5, 5, 5);
-//                    tv.setText(text);
-//                    row.addView(tv);
-//                }
-//                tableLayout.addView(row);
-//
-//            }
-//        }
-//
+        while(data.moveToNext()){
+            //get the value from the database in column 1
+            //then add it to the ArrayList
+//            String info = data.getString(data.getColumnIndex("timestamp"))+ " " + data.getString(data.getColumnIndex("name"));
+            String info = data.getString(data.getColumnIndex("timestamp"));
 
-        // for extra items in the bag but not in the current list
-        // reset data
-        data = database.getData();
-        if(data.getCount()>0){
-            while (data.moveToNext()){
-                String extra_id= data.getString(data.getColumnIndex("ID"));
-//                    String name= curdata.getString(curdata.getColumnIndex("name"));
-
-                String extra_name = data.getString(data.getColumnIndex("name"));
-                String extra_time = data.getString(data.getColumnIndex("timestamp"));
-               String extra_item_status = "NOT NEEDED";
-
-//                if()
-
-//                if (!registeredItems.contains(extra_name)){
-//                            System.out.println(name + "  " + temp_name);
-//                        time = data.getString(data.getColumnIndex("timestamp"));
-                    // data rows
-                    TableRow row = new TableRow(this);
-                    row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
-                            TableLayout.LayoutParams.WRAP_CONTENT));
-//                String[] colText={id+"",name,time};
-                    String[] colText={extra_name,extra_id,extra_time, extra_item_status};
-
-                    for(String text:colText) {
-                        TextView tv = new TextView(this);
-                        tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-                                TableRow.LayoutParams.WRAP_CONTENT));
-                        tv.setGravity(Gravity.CENTER);
-                        tv.setTextSize(10);
-                        tv.setPadding(5, 5, 5, 5);
-                        tv.setText(text);
-                        row.addView(tv);
-                    }
-                    tableLayout.addView(row);
-
-            }
+//            listData.add(data.getString(data.getColumnIndex("timestamp")));
+            listData.add(info);
         }
+        ArrayList<String> listDataReverse = new ArrayList<>();
+        for (int j = listData.size() - 1; j >= 0; j--) {
+            listDataReverse.add(listData.get(j));
+        }
+        //create the list adapter and set the adapter
+        ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listDataReverse);
+        mListView.setAdapter(adapter);
+
+        //set an onItemClickListener to the ListView
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = adapterView.getItemAtPosition(i).toString();
+                String[] temp = name.split(" ");
+                String time = temp[0];
+                String item = temp[1];
+
+                Log.d(TAG, "onItemClick: You Clicked on " + name);
+
+                Cursor data = bagDatabaseHelper.getItemID(time); //get the id associated with that name
+                String itemName = " ";
+//                while(data.moveToNext()) {
+////                    itemDetection = data.getString(1);
+//
+//                }
+                itemName = item;
+                if(!itemName.equals(" ")){
+                    Log.d(TAG, "onItemClick: Read: " + itemName);
+                    Intent editScreenIntent = new Intent(BagHistory.this, HistoryInfo.class);
+                    editScreenIntent.putExtra("name",itemName);
+                    editScreenIntent.putExtra("time",time);
+                    startActivity(editScreenIntent);
+                }
+                else{
+                    toastMessage("No Detection associated with that time");
+                }
+            }
+        });
+    }
+
+    /**
+     * customizable toast
+     * @param message
+     */
+    private void toastMessage(String message){
+        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
 }

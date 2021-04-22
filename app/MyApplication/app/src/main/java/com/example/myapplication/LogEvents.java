@@ -92,7 +92,7 @@ public class LogEvents extends AppCompatActivity {
                 }
                 itemDetection = detect;
                 if(!itemDetection.equals(" ")){
-                    Log.d(TAG, "onItemClick: The ID is: " + itemDetection);
+                    Log.d(TAG, "onItemClick: The Event is: " + itemDetection);
                     Intent editScreenIntent = new Intent(LogEvents.this, LogInfo.class);
                     editScreenIntent.putExtra("detection",itemDetection);
                     editScreenIntent.putExtra("time",time);

@@ -47,12 +47,10 @@ public class RegisterMode extends AppCompatActivity{
     BluetoothSocket mmSocket;
     BluetoothDevice mmDevice;
     public String message;
-    HashMap<String, String> map;
 
     public class ConnectThread extends Thread {
         private ConnectThread(BluetoothDevice device, String msg, DatabaseHelperRegisterMode database, String itemName) throws IOException, JSONException {
 
-//            map = new HashMap<>();
             message = "";
             BluetoothSocket tmp = null;
             mmDevice = device;
@@ -85,6 +83,10 @@ public class RegisterMode extends AppCompatActivity{
             receive(database, itemName);
         }
 
+        public void sendVerify(String msg) throws IOException, JSONException {
+            OutputStream mmOutputStream = mmSocket.getOutputStream();
+            mmOutputStream.write(msg.getBytes());
+        }
         public void receive(DatabaseHelperRegisterMode database, String itemName) throws IOException, JSONException {
 
             InputStream mmInputStream = mmSocket.getInputStream();
@@ -92,16 +94,22 @@ public class RegisterMode extends AppCompatActivity{
             StringWriter w = new StringWriter();
             byte[] buffer = new byte[65536];
             int bytes;
-
             try {
                 bytes = mmInputStream.read(buffer);
                 String readMessage = new String(buffer, 0, bytes);
                 Log.d(TAG, "Received: " + readMessage);
-
+                String id;
+                if(!readMessage.equals("No Items read from bag")){
+                    id = database.addData(readMessage, itemName);
+                    tagId.setText(id);
+                    sendVerify("recReg");
+                }
+                else{
+                    toastMessage("No item detected");
+                }
 //                boolean b = database.addData(readMessage, itemName);
-                String id = database.addData(readMessage, itemName);
 //                message = readMessage;
-                tagId.setText(id);
+
                 mmSocket.close();
             } catch (IOException e) {
                 Log.e(TAG, "Problems occurred!");
@@ -135,7 +143,7 @@ public class RegisterMode extends AppCompatActivity{
                 String newEntryName = editText.getText().toString();
                 if (editText.length() != 0) {
                     try {
-                        new RegisterMode.ConnectThread(device,"read", rDatabaseHelper, newEntryName).start();
+                        new RegisterMode.ConnectThread(device,"register", rDatabaseHelper, newEntryName).start();
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }

@@ -26,6 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static String TABLE_NAME = "items_table";
     private static final String ID = "ID";
     private static final String ITEM = "name";
+    private static final String STATUS = "status";
 
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -40,6 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
 //        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
 //                COL2 +" TEXT)";
+//        String createTable = "CREATE TABLE " + TABLE_NAME + " (" + ID +" TEXT PRIMARY KEY, " +
+//                ITEM +" TEXT," + STATUS +" )";
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" + ID +" TEXT PRIMARY KEY, " +
                 ITEM +" TEXT)";
         db.execSQL(createTable);
@@ -73,51 +76,45 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             }
 
         }
+
+        //checking if it's not already in database
+//        Cursor checking_data = getData();
+
+//        if(checking_data.getCount()>0){
+//            while (checking_data.moveToNext()){
+//                String checking_id = checking_data.getString(checking_data.getColumnIndex("ID"));
+//                if (checking_id.equals(id)){
+//                    System.out.println(checking_id + "  " + id);
+//                    break;
+//                }
+//                else {
+//                    contentValues.put(ID, id);
+//                    contentValues.put(ITEM, item);
 //
-//        for (Map.Entry<String, String> e : map.entrySet()){
-////            System.out.println(e.getKey() + " " + e.getValue());
-//            String val = e.getValue();
-//            if(val.equals(item)){
-//                id = e.getKey();
-//                break;
+//                    Log.d(TAG, "addData: Adding " + item + " to " + TABLE_NAME);
+//
+//                    long result = db.insert(TABLE_NAME, null, contentValues);
+//                    db.close();
+//                    //if date as inserted incorrectly it will return -1
+//                    if (result == -1) {
+//                        return false;
+//                    } else {
+//                        ///for updating firebase
+//                        DatabaseReference postsRef = items_list_ref.child(item);
+//                        postsRef.setValue(id);
+//                        return true;
+//                    }
+//
+//                }
 //            }
 //        }
-        //checking if it's not already in database
-        Cursor checking_data = getData();
-
-        if(checking_data.getCount()>0){
-            while (checking_data.moveToNext()){
-                String checking_id = checking_data.getString(checking_data.getColumnIndex("ID"));
-                if (checking_id.equals(id)){
-                    System.out.println(checking_id + "  " + id);
-                    break;
-                }
-                else {
-                    contentValues.put(ID, id);
-                    contentValues.put(ITEM, item);
-
-                    Log.d(TAG, "addData: Adding " + item + " to " + TABLE_NAME);
-
-                    long result = db.insert(TABLE_NAME, null, contentValues);
-                    db.close();
-                    //if date as inserted incorrectly it will return -1
-                    if (result == -1) {
-                        return false;
-                    } else {
-                        ///for updating firebase
-                        DatabaseReference postsRef = items_list_ref.child(item);
-                        postsRef.setValue(id);
-                        return true;
-                    }
-
-                }
-            }
-        }
-        else{
+//        else{
             contentValues.put(ID, id);
             contentValues.put(ITEM, item);
+//            contentValues.put(STATUS,"");
 
-            Log.d(TAG, "addData: Adding " + item + " to " + TABLE_NAME);
+
+        Log.d(TAG, "addData: Adding " + item + " to " + TABLE_NAME);
 
             long result = db.insert(TABLE_NAME, null, contentValues);
              db.close();
@@ -128,17 +125,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 ///for updating firebase
                 DatabaseReference postsRef = items_list_ref.child(item);
                 postsRef.setValue(id);
+                db.close();
                 return true;
             }
-        }
-
-
-
-
-
-
-        db.close();
-        return true;
+//        }
+//        db.close();
+//        return true;
 
     }
 
@@ -169,6 +161,19 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     /**
+     * Returns only the STATUS that matches the name passed in
+     * @param name
+     * @return
+     */
+    public Cursor getStatus(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + STATUS + " FROM " + TABLE_NAME +
+                " WHERE " + ITEM + " = '" + name + "'";
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
+    /**
      * Updates the name field
      * @param newName
      * @param id
@@ -181,6 +186,22 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 " AND " + ITEM + " = '" + oldName + "'";
         Log.d(TAG, "updateName: query: " + query);
         Log.d(TAG, "updateName: Setting name to " + newName);
+        db.execSQL(query);
+    }
+
+    /**
+     * Updates the name field
+     * @param newStatus
+     * @param id
+     * @param oldStatus
+     */
+    public void updateStatus(String newStatus, String id, String oldStatus){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "UPDATE " + TABLE_NAME + " SET " + ITEM +
+                " = '" + newStatus + "' WHERE " + ID + " = '" + id + "'" +
+                " AND " + ITEM + " = '" + oldStatus + "'";
+        Log.d(TAG, "updateName: query: " + query);
+        Log.d(TAG, "updateName: Setting name to " + newStatus);
         db.execSQL(query);
     }
 
